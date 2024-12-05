@@ -12,25 +12,37 @@
     <link rel="stylesheet" href="TemplateData/style.css" />
 
     <!-- Meta Description -->
-    <meta name="facebook-domain-verification" content="The most fun and rewarding turn-based game to earn rewards.
-Battle with other users, win & earn PBUX or GOLD instaneously!">
+    <meta
+      name="facebook-domain-verification"
+      content="The most fun and rewarding turn-based game to earn rewards.
+Battle with other users, win & earn PBUX or GOLD instaneously!"
+    />
     <!-- Open Graph for Social Media -->
-    <meta property="og:image" content="/TemplateData/og_image.png">
-    <meta property="og:image:width" content="1500">
-    <meta property="og:image:height" content="500">
-    <meta property="og:title" content="Playbux - Bux Royale">
-    <meta property="og:url" content="https://buxroyale.site/">
-    <meta property="og:description" content="The most fun and rewarding turn-based game to earn rewards.
-Battle with other users, win & earn PBUX or GOLD instaneously!">
+    <meta property="og:image" content="/TemplateData/og_image.png" />
+    <meta property="og:image:width" content="1500" />
+    <meta property="og:image:height" content="500" />
+    <meta property="og:title" content="Playbux - Bux Royale" />
+    <meta property="og:url" content="https://buxroyale.site/" />
+    <meta
+      property="og:description"
+      content="The most fun and rewarding turn-based game to earn rewards.
+Battle with other users, win & earn PBUX or GOLD instaneously!"
+    />
     <!-- Twitter Card -->
-    <meta property="Bux Royal Game" content="Playbux - Bux Royale">
-    <meta name="twitter:site" content="@playbuxco">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:creator" content="@playbuxco" data-rh="true">
-    <meta name="twitter:title" content="Playbux - Bux Royale">
-    <meta name="twitter:description" content="The most fun and rewarding turn-based game to earn rewards.
-Battle with other users, win & earn PBUX or GOLD instaneously!">
-    <meta name="twitter:image" content="https://buxroyale.site/TemplateData/og_image.png">
+    <meta property="Bux Royal Game" content="Playbux - Bux Royale" />
+    <meta name="twitter:site" content="@playbuxco" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@playbuxco" data-rh="true" />
+    <meta name="twitter:title" content="Playbux - Bux Royale" />
+    <meta
+      name="twitter:description"
+      content="The most fun and rewarding turn-based game to earn rewards.
+Battle with other users, win & earn PBUX or GOLD instaneously!"
+    />
+    <meta
+      name="twitter:image"
+      content="https://buxroyale.site/TemplateData/og_image.png"
+    />
   </head>
   <body class="dark">
     <div id="unity-container" class="unity-desktop">
@@ -52,13 +64,13 @@ Battle with other users, win & earn PBUX or GOLD instaneously!">
     <script type="module">
             const hideFullScreenButton = "false";
             const buildUrl = "Build";
-            const loaderUrl = buildUrl + "/BuxRoyal.loader.js";
+            const loaderUrl = buildUrl + "/Build.loader.js";
             const config = {
-              dataUrl: buildUrl + "/BuxRoyal.data.unityweb",
-              frameworkUrl: buildUrl + "/BuxRoyal.framework.js.unityweb",
-              codeUrl: buildUrl + "/BuxRoyal.wasm.unityweb",
+              dataUrl: buildUrl + "/Build.data.unityweb",
+              frameworkUrl: buildUrl + "/Build.framework.js.unityweb",
+              codeUrl: buildUrl + "/Build.wasm.unityweb",
               streamingAssetsUrl: "StreamingAssets",
-              companyName: "Exit Games GmbH",
+              companyName: "Var-meta",
               productName: "Bux Royale",
               productVersion: "0.0.1",
             };
@@ -95,7 +107,7 @@ Battle with other users, win & earn PBUX or GOLD instaneously!">
             const script = document.createElement("script");
             script.src = loaderUrl;
             script.onload = () => {
-              import('./lib/thirdweb-unity-bridge.js').then(module => {
+
                 createUnityInstance(canvas, config, (progress) => {
                   spinner.style.display = "none";
                   progressBarEmpty.style.display = "";
@@ -104,20 +116,20 @@ Battle with other users, win & earn PBUX or GOLD instaneously!">
                   loadingCover.style.display = "none";
                   if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
                     alertMobile.className = "alert-mobile";
-                    alertMobile.style.display = "block";
+                    alertMobile.style.display = "none";
                   }
                   if (canFullscreen) {
                     if (!hideFullScreenButton) {
                       fullscreenButton.style.display = "";
                     }
                     fullscreenButton.onclick = () => {
-                      document.makeFullscreen('unity-container');
+                      unityInstance.SetFullscreen(1);
                     };
                   }
                 }).catch((message) => {
                   alert(message);
                 });
-              });
+
             };
             document.body.appendChild(script);
     </script>

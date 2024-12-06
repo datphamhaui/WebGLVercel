@@ -102,21 +102,4 @@ body {
   }
 }
 
-#alert-mobile{
-    display: none;
-}
-
-.alert-mobile {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000000c7;
-    color: #fff;
-    font-size: 20px;
-    text-align: center;
-    padding-top: 100%;
-    margin: 0;
-}
 

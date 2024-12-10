@@ -1,4 +1,34 @@
 <linker>
+  <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="EntityComponentBuffs" preserve="all" />
+    <type fullname="EntityComponentCounterHelix" preserve="all" />
+    <type fullname="EntityComponentEffectArea" preserve="all" />
+    <type fullname="EntityComponentHealth" preserve="all" />
+    <type fullname="EntityComponentMovement" preserve="all" />
+    <type fullname="EntityComponentNavMeshAvoidanceAgent" preserve="all" />
+    <type fullname="EntityComponentNavMeshPathfinder" preserve="all" />
+    <type fullname="EntityComponentNavMeshSteeringAgent" preserve="all" />
+    <type fullname="EntityComponentStun" preserve="all" />
+    <type fullname="EntityComponentTarget" preserve="all" />
+    <type fullname="EntityComponentThunderZap" preserve="all" />
+    <type fullname="EntityComponentUnit" preserve="all" />
+    <type fullname="EntityComponentUnitAI" preserve="all" />
+    <type fullname="EntityComponentUnitStats" preserve="all" />
+    <type fullname="EntityComponentWeapon" preserve="all" />
+    <type fullname="EntityPrototype" preserve="all" />
+    <type fullname="ThePattern.Unity.Extensions.AnimationEventReceiver" preserve="all" />
+    <type fullname="TowerRush.Entity" preserve="all" />
+    <type fullname="EntityPrototype/InitialNavMeshTargetInfo" preserve="nothing" serialized="true" />
+    <type fullname="EntityPrototype/NavMeshAvoidanceAgentInfo" preserve="nothing" serialized="true" />
+    <type fullname="EntityPrototype/NavMeshPathfinderInfo" preserve="nothing" serialized="true" />
+    <type fullname="EntityPrototype/NavMeshSpec" preserve="nothing" serialized="true" />
+    <type fullname="EntityPrototype/NavMeshSteeringAgentInfo" preserve="nothing" serialized="true" />
+    <type fullname="EntityPrototype/OverrideFP" preserve="nothing" serialized="true" />
+    <type fullname="EntityPrototype/PhysicsBodyGeneric" preserve="nothing" serialized="true" />
+    <type fullname="EntityPrototype/PhysicsColliderGeneric" preserve="nothing" serialized="true" />
+    <type fullname="EntityPrototype/Transform2DVerticalInfo" preserve="nothing" serialized="true" />
+    <type fullname="EntityView/EntityUnityEvent" preserve="nothing" serialized="true" />
+  </assembly>
   <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
     <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
   </assembly>
@@ -9,8 +39,62 @@
     <type fullname="UnityEngine.ResourceManagement.ResourceProviders.LegacyResourcesProvider" preserve="all" />
     <type fullname="UnityEngine.ResourceManagement.ResourceProviders.SceneProvider" preserve="all" />
   </assembly>
+  <assembly fullname="UnityEngine.AnimationModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.AnimationClip" preserve="all" />
+    <type fullname="UnityEngine.Animator" preserve="all" />
+    <type fullname="UnityEngine.AnimatorOverrideController" preserve="all" />
+    <type fullname="UnityEngine.RuntimeAnimatorController" preserve="all" />
+  </assembly>
   <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="UnityEngine.Sprite" preserve="all" />
+    <type fullname="UnityEngine.GameObject" preserve="all" />
+    <type fullname="UnityEngine.Material" preserve="all" />
+    <type fullname="UnityEngine.Mesh" preserve="all" />
+    <type fullname="UnityEngine.MeshFilter" preserve="all" />
+    <type fullname="UnityEngine.MeshRenderer" preserve="all" />
+    <type fullname="UnityEngine.Object" preserve="all" />
+    <type fullname="UnityEngine.Shader" preserve="all" />
+    <type fullname="UnityEngine.SkinnedMeshRenderer" preserve="all" />
     <type fullname="UnityEngine.Texture2D" preserve="all" />
+    <type fullname="UnityEngine.Transform" preserve="all" />
+    <type fullname="UnityEngine.Events.PersistentCallGroup" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="UnityEngine.ParticleSystemModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.ParticleSystem" preserve="all" />
+    <type fullname="UnityEngine.ParticleSystemRenderer" preserve="all" />
+  </assembly>
+  <assembly fullname="PhotonDeterministic">
+    <type fullname="Photon.Deterministic.FP" preserve="nothing" serialized="true" />
+    <type fullname="Photon.Deterministic.FPVector2" preserve="nothing" serialized="true" />
+    <type fullname="Photon.Deterministic.FPVector3" preserve="nothing" serialized="true" />
+    <type fullname="Photon.Deterministic.NullableFP" preserve="nothing" serialized="true" />
+    <type fullname="Photon.Deterministic.NullableFPVector3" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="quantum.code">
+    <type fullname="Quantum.Prototypes.Buffs_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.CounterHelix_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.EffectArea_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.Health_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.Movement_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.Stun_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.Target_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.ThunderZap_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.Unit_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.UnitAI_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.UnitStats_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.Weapon_Prototype" preserve="nothing" serialized="true" />
+  </assembly>
+  <assembly fullname="quantum.core">
+    <type fullname="Quantum.AssetGuid" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.AssetRefEntityView" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.AssetRefNavMesh" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.AssetRefNavMeshAgentConfig" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.AssetRefPhysicsMaterial" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.AssetRefPolygonCollider" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.CallbackFlags_Wrapper" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.NavMeshAvoidanceAgent_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.NavMeshPathfinder_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.NavMeshSteeringAgent_Prototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Shape2DConfig" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Shape3DConfig" preserve="nothing" serialized="true" />
   </assembly>
 </linker>

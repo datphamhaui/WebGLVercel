@@ -35,9 +35,6 @@ Battle with other users, win & earn PBUX or GOLD instaneously!">
   <body class="dark">
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas"></canvas>
-      <p id="alert-mobile" class="">
-        As this moment, this device does not support the feature
-      </p>
     </div>
     <div id="loading-cover" style="display: none">
       <div id="unity-loading-bar">
@@ -54,9 +51,9 @@ Battle with other users, win & earn PBUX or GOLD instaneously!">
             const buildUrl = "Build";
             const loaderUrl = buildUrl + "/Build.loader.js";
             const config = {
-              dataUrl: buildUrl + "/Build.data.unityweb",
-              frameworkUrl: buildUrl + "/Build.framework.js.unityweb",
-              codeUrl: buildUrl + "/Build.wasm.unityweb",
+              dataUrl: buildUrl + "/Build.data",
+              frameworkUrl: buildUrl + "/Build.framework.js",
+              codeUrl: buildUrl + "/Build.wasm",
               streamingAssetsUrl: "StreamingAssets",
               companyName: "Varmeta",
               productName: "Bux Royale",
@@ -70,7 +67,6 @@ Battle with other users, win & earn PBUX or GOLD instaneously!">
             const progressBarFull = document.querySelector("#unity-progress-bar-full");
             const fullscreenButton = document.querySelector("#unity-fullscreen-button");
             const spinner = document.querySelector('.spinner');
-            const alertMobile = document.querySelector('#alert-mobile');
 
             const canFullscreen = (function() {
               for (const key of [
@@ -102,16 +98,12 @@ Battle with other users, win & earn PBUX or GOLD instaneously!">
                   progressBarFull.style.width = `${100 * progress}%`;
                 }).then((unityInstance) => {
                   loadingCover.style.display = "none";
-                  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                    alertMobile.className = "alert-mobile";
-                    // alertMobile.style.display = "block";
-                  }
                   if (canFullscreen) {
                     if (!hideFullScreenButton) {
                       fullscreenButton.style.display = "";
                     }
                     fullscreenButton.onclick = () => {
-                      document.makeFullscreen('unity-container');
+                      unityInstance.SetFullscreen(1);
                     };
                   }
                 }).catch((message) => {

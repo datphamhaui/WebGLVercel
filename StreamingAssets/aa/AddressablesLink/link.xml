@@ -62,9 +62,6 @@
     <type fullname="UnityEngine.ParticleSystem" preserve="all" />
     <type fullname="UnityEngine.ParticleSystemRenderer" preserve="all" />
   </assembly>
-  <assembly fullname="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="UnityEngine.BoxCollider" preserve="all" />
-  </assembly>
   <assembly fullname="PhotonDeterministic">
     <type fullname="Photon.Deterministic.FP" preserve="nothing" serialized="true" />
     <type fullname="Photon.Deterministic.FPVector2" preserve="nothing" serialized="true" />

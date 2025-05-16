@@ -73,18 +73,30 @@
     window.ConnectWallet = async function() {
         try {
             if (!sdk) {
+                console.log("SDK not initialized, initializing now...");
                 const initialized = await initializeSDK();
-                if (!initialized) return null;
+                if (!initialized) {
+                    console.error("Failed to initialize SDK");
+                    myGameInstance.SendMessage('Web3Manager', 'OnWalletError', "Failed to initialize SDK");
+                    return null;
+                }
             }
 
+            console.log("Getting wallet provider...");
             const provider = sdk.getWalletProvider();
+            console.log("Requesting accounts...");
             const accounts = await provider.request({ method: 'kaia_requestAccounts' });
 
             if (accounts && accounts.length > 0) {
                 connectedAddress = accounts[0];
+                console.log("Wallet connected successfully: " + connectedAddress);
                 myGameInstance.SendMessage('Web3Manager', 'OnWalletConnected', connectedAddress);
+            } else {
+                console.error("No accounts returned");
+                myGameInstance.SendMessage('Web3Manager', 'OnWalletError', "No accounts returned");
             }
         } catch (error) {
+            console.error("Connect wallet error:", error);
             myGameInstance.SendMessage('Web3Manager', 'OnWalletError', error.message);
         }
     }

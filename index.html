@@ -1,133 +1,181 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no"
-    />
-    <title>StarSymphony</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico" />
-    <link rel="stylesheet" href="TemplateData/style.css" />
-  </head>
-  <body class="dark">
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas"></canvas>
-    </div>
-    <div id="loading-cover" style="display: none">
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty" style="display: none">
-          <div id="unity-progress-bar-full"></div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity WebGL Player</title>
+    <script src="scripts/dapp-portal-sdk.js"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        #unity-container { width: 100%; height: 100%; position: absolute; }
+        #unity-canvas { width: 100%; height: 100%; background: #231F20; }
+        #unity-loading-bar { display: none; }
+        #unity-progress-bar-empty { width: 141px; height: 18px; margin-top: 10px; background: url('Build/minidapp.progress-bar-empty-dark.png') no-repeat center; }
+        #unity-progress-bar-full { width: 0%; height: 18px; margin-top: 10px; background: url('Build/minidapp.progress-bar-full-dark.png') no-repeat center; }
+    </style>
+</head>
+<body>
+<div id="unity-container">
+    <canvas id="unity-canvas"></canvas>
+    <div id="unity-loading-bar">
+        <div id="unity-progress-bar-empty">
+            <div id="unity-progress-bar-full"></div>
         </div>
-        <div class="spinner"></div>
-      </div>
     </div>
-    <div id="unity-fullscreen-button" style="display: none"></div>
-    <script type="module">
-            const hideFullScreenButton = "";
-            const buildUrl = "Build";
-            const loaderUrl = buildUrl + "/SSWebGL.loader.js";
-            const config = {
-              dataUrl: buildUrl + "/SSWebGL.data.unityweb",
-              frameworkUrl: buildUrl + "/SSWebGL.framework.js.unityweb",
-              codeUrl: buildUrl + "/SSWebGL.wasm.unityweb",
-              streamingAssetsUrl: "StreamingAssets",
-              companyName: "Sekai",
-              productName: "StarSymphony",
-              productVersion: "ss_0.17.2-album4.4",
-            };
+</div>
+<script src="Build/minidapp.loader.js"></script>
+<script>
+    var sdk = null;
+    var connectedAddress = null;
+    var myGameInstance = null;
 
-            const container = document.querySelector("#unity-container");
-            const canvas = document.querySelector("#unity-canvas");
-            const loadingCover = document.querySelector("#loading-cover");
-            const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
-            const progressBarFull = document.querySelector("#unity-progress-bar-full");
-            const fullscreenButton = document.querySelector("#unity-fullscreen-button");
-            const spinner = document.querySelector('.spinner');
-
-            const canFullscreen = (function() {
-              for (const key of [
-                  'exitFullscreen',
-                  'webkitExitFullscreen',
-                  'webkitCancelFullScreen',
-                  'mozCancelFullScreen',
-                  'msExitFullscreen',
-                ]) {
-                if (key in document) {
-                  return true;
-                }
-              }
-              return false;
-            }());
-
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-              container.className = "unity-mobile";
-              config.devicePixelRatio = 1;
+    var Module = {
+        onRuntimeInitialized: function() {
+            console.log("Runtime initialized");
+        },
+        env: {
+            MintToken: function(amount) {
+                window.MintToken(amount);
+            },
+            GetBalance: function() {
+                window.GetBalance();
+            },
+            ConnectWallet: function() {
+                window.ConnectWallet();
+            },
+            DisconnectWallet: function() {
+                window.DisconnectWallet();
+            },
+            GetConnectedAddress: function() {
+                var address = window.GetConnectedAddress();
+                var bufferSize = lengthBytesUTF8(address) + 1;
+                var buffer = _malloc(bufferSize);
+                stringToUTF8(address, buffer, bufferSize);
+                return buffer;
             }
-            loadingCover.style.display = "";
-            const script = document.createElement("script");
-            script.src = loaderUrl;
-            script.onload = () => {
-               {
-                createUnityInstance(canvas, config, (progress) => {
-                  spinner.style.display = "none";
-                  progressBarEmpty.style.display = "";
-                  progressBarFull.style.width = `${100 * progress}%`;
-                }).then((unityInstance) => {
-				window.unityInstance = unityInstance;
-                  loadingCover.style.display = "none";
-                  if (canFullscreen) {
-                    if (!hideFullScreenButton) {
-                      fullscreenButton.style.display = "";
-                    }
-                    fullscreenButton.onclick = () => {
-                      unityInstance.SetFullscreen(1);
-                    };
-                  }
-                }).catch((message) => {
-                  alert(message);
-                });
-              };
+        }
+    };
+
+    async function initializeSDK() {
+        try {
+            sdk = await DappPortalSDK.init({
+                clientId: '4b4d9ced-efc9-43a1-978c-b06c3770728b',
+                chainId: '1001'
+            });
+            console.log("SDK initialized");
+            return true;
+        } catch (error) {
+            console.error("SDK init error:", error);
+            return false;
+        }
+    }
+
+    window.ConnectWallet = async function() {
+        try {
+            if (!sdk) {
+                const initialized = await initializeSDK();
+                if (!initialized) return null;
+            }
+
+            const provider = sdk.getWalletProvider();
+            const accounts = await provider.request({ method: 'kaia_requestAccounts' });
+
+            if (accounts && accounts.length > 0) {
+                connectedAddress = accounts[0];
+                myGameInstance.SendMessage('Web3Manager', 'OnWalletConnected', connectedAddress);
+            }
+        } catch (error) {
+            myGameInstance.SendMessage('Web3Manager', 'OnWalletError', error.message);
+        }
+    }
+
+    window.DisconnectWallet = async function() {
+        try {
+            if (!sdk) {
+                console.error("SDK not initialized");
+                return;
+            }
+
+            const provider = sdk.getWalletProvider();
+            await provider.disconnect();
+
+            // Reset connected address
+            connectedAddress = null;
+            myGameInstance.SendMessage('Web3Manager', 'OnWalletDisconnected');
+            console.log("Wallet disconnected successfully");
+        } catch (error) {
+            console.error("Disconnect error:", error);
+            myGameInstance.SendMessage('Web3Manager', 'OnWalletError', "Disconnect failed: " + error.message);
+        }
+    }
+
+    window.GetConnectedAddress = function() {
+        return connectedAddress || '';
+    }
+
+    window.MintToken = async function(amount) {
+        try {
+            const provider = sdk.getWalletProvider();
+
+            const mintSignature = '0xa0712d68';
+            const amountHex = amount.toString(16).padStart(64, '0');
+            const data = mintSignature + amountHex;
+
+            const tx = {
+                from: connectedAddress,
+                to: '0x099D7feC4f799d1749adA8815eB21375E13E0Ddb',
+                value: '0x0',
+                data: data,
+                gas: '0x4C4B40'
             };
-			
-			
-			window.oncontextmenu = function(){
-			return false;
-			}
-			
-			
-            document.body.appendChild(script);
-    </script>
-	<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics-compat.js"></script>
-	<script>
-  // Import the functions you need from the SDKs you need
 
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+            const txHash = await provider.request({
+                method: 'kaia_sendTransaction',
+                params: [tx]
+            });
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-   	const firebaseApp = firebase.initializeApp({
+            myGameInstance.SendMessage('Web3Manager', 'OnMintSuccess', txHash);
+            GetBalance(); // Get updated balance after mint
+        } catch (error) {
+            myGameInstance.SendMessage('Web3Manager', 'OnMintError', error.message);
+        }
+    }
 
-    apiKey: "AIzaSyC-LejCfRjjpKjKvkRCHrZUiQ1wLMQHzzY",
-    authDomain: "ss-database-97ac0.firebaseapp.com",
-    projectId: "ss-database-97ac0",
-    storageBucket: "ss-database-97ac0.appspot.com",
-    messagingSenderId: "522783040360",
-    appId: "1:522783040360:web:3698fcc61ff500b523ecdd",
-    measurementId: "G-NF253HND1P"
-  });
+    window.GetBalance = async function() {
+        try {
+            const provider = sdk.getWalletProvider();
 
-  // Initialize Firebase
-  const db = firebaseApp.firestore();
-const auth = firebaseApp.auth();
-  
+            const balanceSignature = '0x70a08231';
+            const addressParam = connectedAddress.substring(2).padStart(64, '0');
+            const data = balanceSignature + addressParam;
+
+            const result = await provider.request({
+                method: 'kaia_call',
+                params: [{
+                    from: connectedAddress,
+                    to: '0x099D7feC4f799d1749adA8815eB21375E13E0Ddb',
+                    data: data
+                }, 'latest']
+            });
+
+            const balance = parseInt(result, 16);
+            myGameInstance.SendMessage('Web3Manager', 'OnBalanceReceived', balance.toString());
+        } catch (error) {
+            myGameInstance.SendMessage('Web3Manager', 'OnBalanceError', error.message);
+        }
+    }
+
+    createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: "Build/minidapp.data",
+        frameworkUrl: "Build/minidapp.framework.js",
+        codeUrl: "Build/minidapp.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "minidapp",
+        productVersion: "0.1",
+    }).then((unityInstance) => {
+        myGameInstance = unityInstance;
+    });
 </script>
-	<script src="StreamingAssets/webgl-frontend.js"></script>
-  </body>
+</body>
 </html>

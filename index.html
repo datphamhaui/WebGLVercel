@@ -86,12 +86,23 @@
             console.log("Getting wallet provider...");
             const provider = sdk.getWalletProvider();
             console.log("Requesting accounts...");
-            const accounts = await provider.request({ method: 'kaia_requestAccounts' });
+            const accounts = await provider.request({ method: 'eth_requestAccounts' });
 
             if (accounts && accounts.length > 0) {
                 connectedAddress = accounts[0];
                 console.log("Wallet connected successfully: " + connectedAddress);
                 myGameInstance.SendMessage('Web3Manager', 'OnWalletConnected', connectedAddress);
+                
+                // Create a message with timestamp for authentication
+                const timestamp = Date.now();
+                const message = "Login to your wallet " + timestamp;
+                
+                // Store the timestamp globally so SignMessage can access it
+                window.lastAuthTimestamp = timestamp;
+                
+                // Automatically sign the message after connection succeeds
+                console.log("Auto-signing message: " + message);
+                window.SignMessage(message);
             } else {
                 console.error("No accounts returned");
                 myGameInstance.SendMessage('Web3Manager', 'OnWalletError', "No accounts returned");
@@ -99,6 +110,35 @@
         } catch (error) {
             console.error("Connect wallet error:", error);
             myGameInstance.SendMessage('Web3Manager', 'OnWalletError', error.message);
+        }
+    }
+
+    window.SignMessage = async function(message) {
+        try {
+            const provider = sdk.getWalletProvider();
+            // Use personal_sign which is the standard for message signing
+            // First parameter: message to sign 
+            // Second parameter: signer address
+            const signature = await provider.request({ 
+                method: 'personal_sign', 
+                params: [message, connectedAddress] 
+            });
+            
+            // Send the signature back to Unity
+            myGameInstance.SendMessage('Web3Manager', 'OnSignMessageSuccess', signature);
+            
+            // If this was an auth message with timestamp, also send the timestamp
+            if (window.lastAuthTimestamp) {
+                myGameInstance.SendMessage('Web3Manager', 'OnAuthTimestamp', window.lastAuthTimestamp.toString());
+                // Clear it after using
+                window.lastAuthTimestamp = null;
+            }
+            
+            return signature;
+        } catch (error) {
+            console.error("Sign message error:", error);
+            myGameInstance.SendMessage('Web3Manager', 'OnSignMessageError', error.message);
+            return null;
         }
     }
 
